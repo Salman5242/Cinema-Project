@@ -28,6 +28,32 @@ export function ThemeProvider({ children }) {
       secondary: {
         main: '#dc004e',
       },
+      background: {
+        default: darkMode ? '#141414' : '#ffffff',
+        paper: darkMode ? '#1f1f1f' : '#f5f5f5',
+      },
+      text: {
+        primary: darkMode ? '#ffffff' : '#000000',
+        secondary: darkMode ? '#b3b3b3' : '#666666',
+      },
+    },
+    components: {
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            backgroundColor: darkMode ? '#1a1a1a' : '#1976d2',
+          },
+        },
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            '&:hover': {
+              backgroundColor: darkMode ? '#f40612' : '#1565c0',
+            },
+          },
+        },
+      },
     },
   });
 

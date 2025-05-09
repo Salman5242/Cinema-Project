@@ -1,18 +1,23 @@
 :root {
-  --primary-color: #1a1a1a;
-  --secondary-color: #2d2d2d;
-  --accent-color: #e50914;
-  --text-color: #ffffff;
-  --text-secondary: #b3b3b3;
-  --background: #141414;
-  --card-background: #1f1f1f;
+  --primary-color: #1976d2;
+  --secondary-color: #dc004e;
+  --accent-color: #1976d2;
+  --text-color: #000000;
+  --text-secondary: #666666;
+  --background: #ffffff;
+  --card-background: #ffffff;
   --transition: all 0.3s ease;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --primary-color: #1a1a1a;
+    --secondary-color: #2d2d2d;
+    --accent-color: #e50914;
+    --text-color: #ffffff;
+    --text-secondary: #b3b3b3;
+    --background: #141414;
+    --card-background: #1f1f1f;
   }
 }
 
@@ -91,11 +96,14 @@ a {
   border-radius: 8px;
   overflow: hidden;
   transition: var(--transition);
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .movie-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .movie-info {
@@ -105,6 +113,7 @@ a {
 .movie-title {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
+  color: var(--text-color);
 }
 
 .movie-meta {
@@ -114,7 +123,7 @@ a {
 
 .button {
   background-color: var(--accent-color);
-  color: var(--text-color);
+  color: #ffffff;
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 4px;
@@ -123,7 +132,8 @@ a {
 }
 
 .button:hover {
-  background-color: #f40612;
+  background-color: var(--accent-color);
+  opacity: 0.9;
 }
 
 .genre-list {
@@ -139,10 +149,18 @@ a {
   border-radius: 4px;
   cursor: pointer;
   transition: var(--transition);
+  color: var(--text-color);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .genre-item:hover {
   background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.genre-item.active {
+  background-color: var(--accent-color);
+  color: #ffffff;
 }
 
 .director-card {
@@ -150,11 +168,14 @@ a {
   padding: 1.5rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .director-name {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  color: var(--text-color);
 }
 
 .director-bio {
@@ -168,6 +189,8 @@ a {
   background-color: var(--card-background);
   padding: 2rem;
   border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .error-page {
@@ -186,10 +209,12 @@ a {
 
 .help-section h1 {
   margin-bottom: 2rem;
+  color: var(--text-color);
 }
 
 .help-section h2 {
   margin: 1.5rem 0 1rem 0;
+  color: var(--text-color);
 }
 
 @media (max-width: 768px) {
