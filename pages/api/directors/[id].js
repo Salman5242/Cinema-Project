@@ -1,5 +1,5 @@
-import { db } from '../../../lib/firebase';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { database } from '../../../lib/firebase';
+import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -10,31 +10,34 @@ export default async function handler(req, res) {
 
   try {
     // Get director details
-    const directorRef = doc(db, 'directors', id);
-    const directorSnap = await getDoc(directorRef);
+    const directorRef = ref(database, `directors/${id}`);
+    const directorSnapshot = await get(directorRef);
 
-    if (!directorSnap.exists()) {
+    if (!directorSnapshot.exists()) {
       return res.status(404).json({ message: 'Director not found' });
     }
 
     const director = {
-      id: directorSnap.id,
-      ...directorSnap.data()
+      id,
+      ...directorSnapshot.val()
     };
 
     // Get movies directed by this director
-    const moviesRef = collection(db, 'movies');
-    const q = query(moviesRef, where('directorId', '==', id));
-    const moviesSnapshot = await getDocs(q);
-    const movies = moviesSnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    const moviesRef = ref(database, 'movies');
+    const moviesQuery = query(moviesRef, orderByChild('directorId'), equalTo(id));
+    const moviesSnapshot = await get(moviesQuery);
+    const movies = moviesSnapshot.val() || {};
+
+    // Convert the movies object to an array with IDs
+    const moviesArray = Object.entries(movies).map(([id, data]) => ({
+      id,
+      ...data
     }));
 
     // Combine director info with their movies
     const directorWithMovies = {
       ...director,
-      movies
+      movies: moviesArray
     };
 
     res.status(200).json(directorWithMovies);

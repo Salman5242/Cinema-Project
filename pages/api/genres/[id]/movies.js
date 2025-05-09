@@ -1,5 +1,5 @@
-import { db } from '../../../../lib/firebase';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { database } from '../../../../lib/firebase';
+import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -9,15 +9,18 @@ export default async function handler(req, res) {
   const { id } = req.query;
 
   try {
-    const moviesRef = collection(db, 'movies');
-    const q = query(moviesRef, where('genreId', '==', id));
-    const snapshot = await getDocs(q);
-    const movies = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    const moviesRef = ref(database, 'movies');
+    const moviesQuery = query(moviesRef, orderByChild('genreId'), equalTo(id));
+    const snapshot = await get(moviesQuery);
+    const movies = snapshot.val() || {};
+
+    // Convert the object to an array with IDs
+    const moviesArray = Object.entries(movies).map(([id, data]) => ({
+      id,
+      ...data
     }));
 
-    res.status(200).json(movies);
+    res.status(200).json(moviesArray);
   } catch (error) {
     console.error('Error fetching movies by genre:', error);
     res.status(500).json({ message: 'Error fetching movies by genre' });

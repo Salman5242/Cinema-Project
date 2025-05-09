@@ -1,5 +1,5 @@
-import { db } from '../../../lib/firebase';
-import { collection, getDocs } from 'firebase/firestore';
+import { database } from '../../../lib/firebase';
+import { ref, get } from 'firebase/database';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -7,14 +7,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const moviesRef = collection(db, 'movies');
-    const snapshot = await getDocs(moviesRef);
-    const movies = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+    const moviesRef = ref(database, 'movies');
+    const snapshot = await get(moviesRef);
+    const movies = snapshot.val() || {};
+
+    // Convert the object to an array with IDs
+    const moviesArray = Object.entries(movies).map(([id, data]) => ({
+      id,
+      ...data
     }));
 
-    res.status(200).json(movies);
+    res.status(200).json(moviesArray);
   } catch (error) {
     console.error('Error fetching movies:', error);
     res.status(500).json({ message: 'Error fetching movies' });

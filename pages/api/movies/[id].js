@@ -1,5 +1,5 @@
-import { db } from '../../../lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { database } from '../../../lib/firebase';
+import { ref, get } from 'firebase/database';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -9,16 +9,16 @@ export default async function handler(req, res) {
   const { id } = req.query;
 
   try {
-    const movieRef = doc(db, 'movies', id);
-    const movieSnap = await getDoc(movieRef);
+    const movieRef = ref(database, `movies/${id}`);
+    const snapshot = await get(movieRef);
 
-    if (!movieSnap.exists()) {
+    if (!snapshot.exists()) {
       return res.status(404).json({ message: 'Movie not found' });
     }
 
     const movie = {
-      id: movieSnap.id,
-      ...movieSnap.data()
+      id,
+      ...snapshot.val()
     };
 
     res.status(200).json(movie);
